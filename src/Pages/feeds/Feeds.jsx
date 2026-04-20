@@ -5,7 +5,7 @@ import PostHeader from "../../components/postCard/PostHeader";
 import { feedApi } from "../../Services/feedServices";
 import { getAllComments } from "../../Services/commentsServices";
 import { likePost } from "../../Services/postServices";
-import PostSkeleton from "../../components/Skeletons/postSkeleton";
+import PostSkeleton from "../../components/Skeletons/PostSkeleton";
 import { AuthContext } from "../../context/AuthContext";
 
 const Feeds = () => {

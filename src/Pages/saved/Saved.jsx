@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 import PostHeader from "../../components/postCard/PostHeader";
 import PostBody from "../../components/postCard/PostBody";
 import PostFooter from "../../components/postCard/PostFooter";
-import PostSkeleton from "../../components/Skeletons/postSkeleton";
+import PostSkeleton from "../../components/Skeletons/PostSkeleton";
 
 const Saved = () => {
   const { userData } = useContext(AuthContext);
