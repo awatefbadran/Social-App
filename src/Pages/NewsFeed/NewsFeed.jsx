@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router";
 import Post from "../../components/post/Post"
-import PostSkeleton from "../../components/Skeletons/PostSkeleton";
+import PostSkeleton from "../../components/Skeletons/PostSkeleton.jsx";
 
 const NewsFeed = () => {
 

@@ -4,7 +4,7 @@ import { singlePostsApi, likePost } from "../../Services/postServices";
 import PostHeader from "../../components/postCard/PostHeader";
 import PostBody from "../../components/postCard/PostBody";
 import PostFooter from "../../components/postCard/PostFooter";
-import PostSkeleton from "../../components/Skeletons/PostSkeleton";
+import PostSkeleton from "../../components/Skeletons/PostSkeleton.jsx";
 import { FiArrowLeft } from "react-icons/fi";
 import { getAllComments } from "../../Services/commentsServices";
 import { AuthContext } from "../../context/AuthContext";

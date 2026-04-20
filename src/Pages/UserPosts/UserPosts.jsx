@@ -4,7 +4,7 @@ import PostFooter from "../../components/postCard/PostFooter";
 import PostHeader from "../../components/postCard/PostHeader";
 import { feedApi } from "../../Services/feedServices";
 import { getAllComments } from "../../Services/commentsServices";
-import PostSkeleton from "../../components/Skeletons/PostSkeleton";
+import PostSkeleton from "../../components/Skeletons/PostSkeleton.jsx";
 import { AuthContext } from "../../context/AuthContext";
 import { likePost } from "../../Services/postServices";
 
