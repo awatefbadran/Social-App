@@ -17,7 +17,6 @@ const Saved = () => {
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch saved posts
   async function fetchSavedPosts() {
     try {
       setLoading(true);
@@ -31,7 +30,7 @@ const Saved = () => {
 
       setSaved(fetchedPosts);
 
-      // init likes
+    
       const likesState = {};
       fetchedPosts.forEach((post) => {
         likesState[post._id] = {
@@ -48,7 +47,7 @@ const Saved = () => {
     }
   }
 
-  // Like
+
   async function handleLike(postId) {
     try {
       await likePost(postId);
@@ -67,7 +66,7 @@ const Saved = () => {
     }
   }
 
-  // Comments
+
   async function fetchComments(postId) {
     try {
       setCommentsLoading(true);
@@ -110,19 +109,19 @@ const Saved = () => {
           ))}
         </div>
       ) : saved.length === 0 ? (
-        // No Saved
+  
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center text-gray-500">
           <p>No saved posts yet.</p>
         </div>
       ) : (
-        // Data
+     
         <div className="flex flex-col items-center space-y-6">
           {saved.map((post) => (
             <article
               key={post._id}
               className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 overflow-hidden w-full space-y-5"
             >
-              {/* Header */}
+           
               <PostHeader
                 photo={post.user?.photo}
                 privacy={post.privacy}
@@ -132,7 +131,7 @@ const Saved = () => {
                 createdAt={post.createdAt}
               />
 
-              {/* Body */}
+         
               <PostBody
                 setComments={setComments}
                 topComment={post.topComment}
@@ -149,7 +148,7 @@ const Saved = () => {
                 handleLike={() => handleLike(post._id)}
               />
 
-              {/* Footer */}
+      
               <PostFooter
                 comments={comments[post._id] || []}
                 topComment={post.topComment}

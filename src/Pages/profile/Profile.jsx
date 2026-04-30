@@ -30,7 +30,7 @@ console.log(userData)
   return (
     <div className="max-w-5xl mx-auto p-4">
 
-      {/* Cover */}
+  
       <div className="relative">
         <img
           src={
@@ -58,10 +58,10 @@ console.log(userData)
         </button>
       </div>
 
-      {/* Profile Card */}
+   
       <div className="bg-white rounded-2xl shadow-md p-6 -mt-20 relative z-10">
 
-        {/* Avatar */}
+  
         <div className="relative w-fit">
           <img
             src={
@@ -99,7 +99,7 @@ console.log(userData)
           </span>
         </div>
 
-        {/* Stats */}
+      
         <div className="grid grid-cols-3 gap-4 mt-6 text-center">
           <div className="bg-gray-100 p-4 rounded-xl">
             <p className="text-gray-400 text-sm">Followers</p>
