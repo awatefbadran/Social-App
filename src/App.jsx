@@ -18,7 +18,7 @@ import Feeds from './Pages/feeds/Feeds'
 import Saved from './Pages/saved/Saved'
 import "unicode-emoji-picker";
 import Settings from './Pages/settings/Settings'
-import Notification from './Pages/Notification/Notification'
+import Notification from './Pages/notification/Notification'
 function App() {
 const routs = createBrowserRouter([
   {
