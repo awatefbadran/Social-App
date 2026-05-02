@@ -96,19 +96,19 @@ const Feeds = () => {
   return (
     <div className="max-w-2xl mx-auto">
       {loading ? (
-        // Loading
+     
         <div className="flex flex-col gap-4">
           {[...Array(2)].map((_, i) => (
             <PostSkeleton key={i} />
           ))}
         </div>
       ) : posts.length === 0 ? (
-        // No Posts
+     
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center text-gray-500">
           <p>No posts available.</p>
         </div>
       ) : (
-        // Data
+   
         <div className="flex flex-col items-center space-y-6">
           {posts.map((post) => (
             <article

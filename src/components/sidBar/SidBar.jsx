@@ -15,7 +15,7 @@ const SidBar = () => {
   return (
     <aside className="w-full md:w-60 mx-auto shrink-0 bg-white rounded-3xl shadow-sm border border-gray-200 py-5 px-4">
 
-      {/* Mobile Grid / Desktop Column */}
+     
       <nav className="grid grid-cols-2 gap-4 md:flex md:flex-col">
 
         {navItems.map(({ to, icon: Icon, label }) => (

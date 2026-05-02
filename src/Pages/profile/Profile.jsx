@@ -1,9 +1,14 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import {
+  uploadPhotoApi,
+  postsApi,
+  savedpostes,
+} from "../../Services/postServices";
 
 const Profile = () => {
   const { userData } = useContext(AuthContext);
-console.log(userData)
+
   const avatarRef = useRef(null);
   const coverRef = useRef(null);
 
@@ -11,26 +16,85 @@ console.log(userData)
   const [previewAvatar, setPreviewAvatar] = useState(null);
   const [previewCover, setPreviewCover] = useState(null);
 
+  const [activeTab, setActiveTab] = useState("posts");
+  const [posts, setPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+
   if (!userData) return <p>Loading...</p>;
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setPreviewAvatar(URL.createObjectURL(file));
+  useEffect(() => {
+    getPosts();
+    getSaved();
+  }, []);
+
+  const getPosts = async () => {
+    try {
+      const res = await postsApi();
+      console.log("POSTS:", res.data);
+
+      setPosts(res.data.posts || res.data.data?.posts || []);
+    } catch (err) {
+      console.log(err);
+      setPosts([]);
     }
   };
 
-  const handleCoverChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setPreviewCover(URL.createObjectURL(file));
+  const getSaved = async () => {
+    try {
+      const res = await savedpostes();
+      console.log("SAVED:", res.data);
+
+      setSavedPosts(res.data.posts || res.data.data?.posts || []);
+    } catch (err) {
+      console.log(err);
+      setSavedPosts([]);
     }
   };
+
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setPreviewAvatar(URL.createObjectURL(file));
+
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    try {
+      await uploadPhotoApi(formData);
+      window.location.reload(); 
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleCoverChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setPreviewCover(URL.createObjectURL(file));
+
+    const formData = new FormData();
+    formData.append("cover", file);
+
+    try {
+      await uploadPhotoApi(formData);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
+  const myPosts = (posts || []).filter(
+    (post) => post.user?._id === userData._id
+  );
+
 
   return (
     <div className="max-w-5xl mx-auto p-4">
-
-  
+   
       <div className="relative">
         <img
           src={
@@ -52,16 +116,15 @@ console.log(userData)
 
         <button
           onClick={() => coverRef.current.click()}
-          className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-lg text-sm shadow hover:bg-gray-100"
+          className="absolute bottom-3 right-3 bg-black/60 text-white px-4 py-2 rounded-lg"
         >
-          Change Cover
+          Change Cover 📷
         </button>
       </div>
 
    
       <div className="bg-white rounded-2xl shadow-md p-6 -mt-20 relative z-10">
-
-  
+      
         <div className="relative w-fit">
           <img
             src={
@@ -70,7 +133,7 @@ console.log(userData)
               "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"
             }
             alt="avatar"
-            className="w-32 h-32 rounded-full border-4 border-white object-cover cursor-pointer hover:scale-105 transition"
+            className="w-32 h-32 rounded-full border-4 border-white object-cover cursor-pointer"
             onClick={() => setShowImage(true)}
           />
 
@@ -83,7 +146,7 @@ console.log(userData)
 
           <button
             onClick={() => avatarRef.current.click()}
-            className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full hover:bg-blue-700"
+            className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full"
           >
             Edit
           </button>
@@ -93,99 +156,83 @@ console.log(userData)
         <div className="mt-4">
           <h2 className="text-2xl font-bold">{userData.name}</h2>
           <p className="text-gray-500">@{userData.username}</p>
-
-          <span className="inline-block mt-2 px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full">
-            Route Posts member
-          </span>
         </div>
 
-      
+     
         <div className="grid grid-cols-3 gap-4 mt-6 text-center">
           <div className="bg-gray-100 p-4 rounded-xl">
-            <p className="text-gray-400 text-sm">Followers</p>
-            <p className="font-bold text-lg">
-              {userData.followersCount || 0}
-            </p>
+            <p>Followers</p>
+            <p className="font-bold">{userData.followersCount || 0}</p>
           </div>
 
           <div className="bg-gray-100 p-4 rounded-xl">
-            <p className="text-gray-400 text-sm">Following</p>
-            <p className="font-bold text-lg">
-              {userData.followingCount || 0}
-            </p>
+            <p>Following</p>
+            <p className="font-bold">{userData.followingCount || 0}</p>
           </div>
 
           <div className="bg-gray-100 p-4 rounded-xl">
-            <p className="text-gray-400 text-sm">Bookmarks</p>
-            <p className="font-bold text-lg">
-              {userData.bookmarksCount || 0}
-            </p>
-          </div>
-        </div>
-
-  
-        <div className="mt-6 bg-gray-50 p-4 rounded-xl">
-          <h3 className="font-semibold text-gray-700 mb-2">About</h3>
-          <p className="text-gray-500">📧 {userData.email}</p>
-          <p className="text-gray-500 mt-1">🟢 Active on Route Posts</p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mt-6">
-          <div className="p-4 bg-gray-100 rounded-xl text-center">
-            <p className="text-gray-400 text-sm">My Posts</p>
-            <p className="font-bold text-lg">0</p>
-          </div>
-
-          <div className="p-4 bg-gray-100 rounded-xl text-center">
-            <p className="text-gray-400 text-sm">Saved Posts</p>
-            <p className="font-bold text-lg">
-              {userData.bookmarksCount || 0}
-            </p>
+            <p>Bookmarks</p>
+            <p className="font-bold">{userData.bookmarksCount || 0}</p>
           </div>
         </div>
       </div>
 
-  
-      <div className="mt-6 flex bg-white rounded-xl shadow overflow-hidden">
-        <button className="flex-1 p-4 text-blue-600 font-semibold border-b-2 border-blue-600">
+      <div className="mt-6 flex bg-white rounded-xl shadow">
+        <button
+          onClick={() => setActiveTab("posts")}
+          className={`flex-1 p-4 ${
+            activeTab === "posts"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500"
+          }`}
+        >
           My Posts
         </button>
-        <button className="flex-1 p-4 text-gray-500 hover:text-blue-600">
+
+        <button
+          onClick={() => setActiveTab("saved")}
+          className={`flex-1 p-4 ${
+            activeTab === "saved"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500"
+          }`}
+        >
           Saved
         </button>
       </div>
 
-  
-      <div className="mt-6 text-center text-gray-400">
-        You have not posted yet.
+   
+      <div className="mt-6">
+        {activeTab === "posts" ? (
+          !myPosts.length ? (
+            <p className="text-center text-gray-400">No posts yet</p>
+          ) : (
+            myPosts.map((post) => (
+              <div key={post._id} className="bg-white p-4 rounded-xl shadow mb-3">
+                <p>{post.body}</p>
+              </div>
+            ))
+          )
+        ) : !savedPosts?.length ? (
+          <p className="text-center text-gray-400">No saved posts</p>
+        ) : (
+          savedPosts.map((post) => (
+            <div key={post._id} className="bg-white p-4 rounded-xl shadow mb-3">
+              <p>{post.body}</p>
+            </div>
+          ))
+        )}
       </div>
 
-
+  
       {showImage && (
         <div
-          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/70 flex items-center justify-center"
           onClick={() => setShowImage(false)}
         >
-        
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowImage(false);
-            }}
-            className="absolute top-6 right-6 text-white text-3xl font-bold"
-          >
-            ×
-          </button>
-
-       
           <img
-            src={
-              previewAvatar ||
-              userData.photo ||
-              "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"
-            }
-            alt="zoomed"
-            className="max-w-[90%] max-h-[80%] rounded-xl shadow-lg"
+            src={previewAvatar || userData.photo}
+            className="max-w-[90%] max-h-[80%] rounded-xl"
             onClick={(e) => e.stopPropagation()}
           />
         </div>

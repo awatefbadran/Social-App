@@ -16,8 +16,6 @@ const Post = ({ post }) => {
     const handleToggleInput = () => {
         setShowInput(prev => !prev);
     };
-
-
     async function handleLike(postId) {
         try {
             await likePost(postId);

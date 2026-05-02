@@ -72,7 +72,6 @@ export default function CreatePost({ refetchPosts }) {
   return (
     <div className="bg-white rounded-2xl shadow-sm p-5 mb-6">
 
-      {/* Header */}
       <div className="flex items-start gap-4 mb-4">
         <Avatar
           size="md"
@@ -112,7 +111,7 @@ export default function CreatePost({ refetchPosts }) {
         </div>
       </div>
 
-      {/* Textarea */}
+     
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
@@ -141,10 +140,9 @@ export default function CreatePost({ refetchPosts }) {
 
         </div>
       )}
-      {/* Divider */}
       <div className="border-t my-4"></div>
 
-      {/* Footer */}
+  
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6 text-gray-600">
 
@@ -154,7 +152,7 @@ export default function CreatePost({ refetchPosts }) {
           </button>
           <Input onInput={() => handelselectedImg()} className="hidden" ref={inputphoto} type="file" />
 
-          {/* Emoji */}
+      
           <div className="relative">
             <button
               onClick={() => setShowEmoji(!showEmoji)}

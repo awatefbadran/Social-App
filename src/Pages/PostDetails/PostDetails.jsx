@@ -31,8 +31,6 @@ const PostDetails = () => {
     }
   }
 
-  
-
   async function handleLike(postId) {
     try {
       await likePost(postId);
@@ -80,7 +78,6 @@ const PostDetails = () => {
       {post ? (
         <div className="flex flex-col items-center justify-start min-h-[80vh] gap-6 py-6">
 
-          {/* Back Button */}
           <div className="self-start ml-[15%]">
             <Link
               to="/"
@@ -90,8 +87,6 @@ const PostDetails = () => {
               <span>Back</span>
             </Link>
           </div>
-
-          {/* Post */}
           <article className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 overflow-hidden w-[80%]">
 
             <PostHeader

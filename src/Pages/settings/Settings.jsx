@@ -29,19 +29,11 @@ export default function Settings() {
 async function onSubmit(data) {
   try {
     const res = await changePasswordApi(data);
-
     toast.success(res?.data?.message);
-
-  
     localStorage.removeItem("token");
-
-    
     setToken(null);
     setUserData(null);
-
     reset();
-
-
     navigate("/login");
 
   } catch (error) {
@@ -53,7 +45,6 @@ async function onSubmit(data) {
   return (
     <div className="flex flex-col items-center min-h-[80vh] py-10 bg-gray-100">
 
-      {/* Back */}
       <div className="w-full max-w-3xl mb-4">
         <Link
           to="/"
@@ -64,12 +55,11 @@ async function onSubmit(data) {
         </Link>
       </div>
 
-      {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-3xl bg-white p-8 rounded-2xl shadow-xl"
       >
-        {/* Header */}
+    
         <div className="flex items-start gap-3 mb-6">
           <div className="p-2 rounded-full bg-blue-100 text-blue-600">
             <LuKeyRound size={20} />
@@ -83,7 +73,7 @@ async function onSubmit(data) {
           </div>
         </div>
 
-        {/* Current Password */}
+       
         <Input
           label="Current password"
           type="password"
@@ -94,7 +84,7 @@ async function onSubmit(data) {
           errorMessage={errors.password?.message}
         />
 
-        {/* New Password */}
+  
         <Input
           label="New password"
           type="password"

@@ -1,103 +1,139 @@
-import { Input } from "@heroui/react";
 import { FiUsers } from "react-icons/fi";
-import { CiSearch } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { suggestions } from "../../Services/postServices";
 import { Link } from "react-router";
-
+import axios from "axios";
 
 const FrindsReq = () => {
-    const [friends, setFriends] = useState([]);
-    useEffect(() => {
-        async function getSuggestions() {
-            const data = await suggestions();
-            console.log(data.data.suggestions);
-            setFriends(data.data.suggestions);
+  const [friends, setFriends] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [loadingUser, setLoadingUser] = useState(null);
+
+  useEffect(() => {
+    async function getSuggestions() {
+      const data = await suggestions();
+      setFriends(data.data.suggestions);
+    }
+
+    const token = localStorage.getItem("token");
+    if (token) getSuggestions();
+  }, []);
+
+  const toggleFollow = async (userId) => {
+    try {
+      const token = localStorage.getItem("token");
+      setLoadingUser(userId);
+
+      const res = await axios.put(
+        `https://route-posts.routemisr.com/users/${userId}/follow`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-  const token = localStorage.getItem("token");
-  if (token) {
-        getSuggestions();
-  }
-    }, []);
-    return (
+      );
+
+      const isFollowing = res.data?.data?.following;
+
+      setFollowing((prev) =>
+        isFollowing
+          ? [...prev, userId]
+          : prev.filter((id) => id !== userId)
+      );
+    } catch (err) {
+      console.log(err.response?.data || err);
+    } finally {
+      setLoadingUser(null);
+    }
+  };
+
+  return (
+    <aside className="
+      w-full 
+      max-w-[280px] 
+      lg:max-w-[260px] 
+      xl:max-w-[300px]
+      bg-white 
+      rounded-2xl 
+      shadow-sm 
+      flex flex-col 
+      h-fit
+      shrink-0
+    ">
+
+      <div className="p-3 border-b flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FiUsers className="text-blue-600" />
+          <h2 className="text-sm font-semibold text-gray-800">
+            Suggested
+          </h2>
+        </div>
+
+        <span className="bg-gray-100 text-blue-600 text-xs px-2 py-0.5 rounded-full">
+          {friends.length}
+        </span>
+      </div>
+
+      {friends.length === 0 ? (
+        <p className="text-center text-gray-400 py-5 text-sm">
+          Loading...
+        </p>
+      ) : (
         <>
+          <ul className="max-h-[350px] overflow-y-auto px-2 py-2 space-y-2">
+            {friends.map((friend) => (
+              <li
+                key={friend._id}
+                className="flex items-center justify-between bg-gray-50 border rounded-lg p-2 hover:bg-gray-100 transition"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <img
+                    src={friend.photo}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
 
-            <aside className="w-75 mx-auto shrink-0 bg-white rounded-3xl shadow-sm border border-gray-200 min-h-[calc(100vh-6rem)] py-4 px-3 flex flex-col">
-                <section className="p-4 border-b border-gray-100 flex items-center justify-between">
+                  <div className="min-w-0">
+                    <h3 className="text-xs font-semibold truncate">
+                      {friend.name}
+                    </h3>
+                    <p className="text-[10px] text-gray-500 truncate">
+                      @{friend.username}
+                    </p>
+                  </div>
+                </div>
 
-                    <div className="flex items-center gap-2">
-                        <FiUsers className="text-2xl text-[#1f6fe5]" />
-                        <h2 className="text-lg font-bold text-gray-800">
-                            Suggested Friends
-                        </h2>
-                    </div>
+                <button
+                  onClick={() => toggleFollow(friend._id)}
+                  disabled={loadingUser === friend._id}
+                  className={`text-[10px] px-2 py-1 rounded-full transition shrink-0
+                    ${
+                      following.includes(friend._id)
+                        ? "bg-gray-200 text-gray-700"
+                        : "bg-blue-100 text-blue-600"
+                    }
+                  `}
+                >
+                  {loadingUser === friend._id
+                    ? "..."
+                    : following.includes(friend._id)
+                    ? "✓"
+                    : "+Follow"}
+                </button>
+              </li>
+            ))}
+          </ul>
 
-                    {/* Badge Number */}
-                    <span className="bg-[#f1f5f9] text-blue-600 text-sm font-semibold px-3 py-1 rounded-full">
-                        {friends.length}
-                    </span>
-
-                </section>
-                {friends.length === 0 ? (
-                    <p className="text-center text-gray-400">Loading...</p>
-                ) : (
-                    <section className="flex-1 flex flex-col min-h-0">
-                        <ul className="flex-1 overflow-y-auto px-4 space-y-2">
-                            {friends.map((friend) => (
-                                <li
-                                    key={friend._id}
-                                    className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col gap-3 hover:shadow-md transition"
-                                >
-                                    <div className="flex items-center justify-between">
-
-                                        <div className="flex items-center gap-3">
-                                            <img
-                                                src={friend.photo}
-                                                alt={friend.name}
-                                                className="w-10 h-10 rounded-full object-cover border"
-                                            />
-                                            <div>
-                                                <h3 className="font-bold text-gray-800 text-sm">
-                                                    {friend.name?.length <= 8
-                                                        ? friend.name
-                                                        : friend.name?.slice(0, 8) + "..."}
-                                                </h3>
-                                                <p className="text-gray-500 text-sm">
-                                                    @{friend.username?.length <= 8
-                                                        ? friend.username
-                                                        : friend.username?.slice(0, 8) + "..."}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        {/* Follow Button */}
-                                        <button className="flex items-center gap-1 px-1 py-1.5 rounded-full bg-blue-100 text-blue-600 text-sm font-medium hover:bg-blue-200 transition">
-                                            + Follow
-                                        </button>
-                                    </div>
-
-                                    {/* Followers Count */}
-                                    <span className="bg-gray-200 text-gray-600 text-xs px-3 py-1 rounded-full w-fit">
-                                        {friend.followersCount || 0} followers
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                        <Link
-                            to="/suggestions"
-                            className="block w-full bg-gray-100  text-center py-2  hover:bg-gray-200 transition mt-3 font-bold"
-                        >
-                            View All
-                        </Link>
-
-
-                    </section>
-
-                )}
-            </aside>
-
+   <Link
+  to="/suggestions"
+  className="block w-full text-center text-xs py-2 mb-2 font-semibold bg-gray-100 hover:bg-gray-200 transition rounded-b-2xl"
+>
+  View All
+</Link>
         </>
-    )
-}
+      )}
+    </aside>
+  );
+};
 
-export default FrindsReq
+export default FrindsReq;

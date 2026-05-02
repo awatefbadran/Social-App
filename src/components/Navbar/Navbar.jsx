@@ -26,13 +26,12 @@ const NavbarComp = () => {
     setToken(null);
     setUserData(null);
   }
-
+console.log(userData)
   return (
     <Navbar
       maxWidth="full"
       className="w-full px-4 md:px-8 bg-white shadow-sm overflow-x-hidden"
     >
-      {/* Left */}
       <NavbarContent justify="start">
         <NavbarBrand className="flex items-center gap-2">
           <img src={icon} className="w-10 h-10 rounded-xl" />
@@ -42,7 +41,6 @@ const NavbarComp = () => {
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Center */}
       <NavbarContent justify="center" className="flex-1">
         <div className="flex items-center gap-4 md:gap-6 bg-[#f8fafc] border border-gray-200 px-3 md:px-4 py-2 md:py-3 rounded-2xl">
 
@@ -84,7 +82,7 @@ const NavbarComp = () => {
         </div>
       </NavbarContent>
 
-      {/* Right */}
+
       <NavbarContent justify="end">
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
@@ -92,7 +90,7 @@ const NavbarComp = () => {
 
               <Avatar
                 size="sm"
-                src={userData?.profilePicture || "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"}
+                src={userData?.photo || "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"}
               />
 
               <span className="font-medium text-sm hidden md:block">

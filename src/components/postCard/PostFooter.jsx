@@ -21,10 +21,7 @@ const PostFooter = ({
   showinput,
 }) => {
 
-
   const { userData } = useContext(AuthContext);
-
-
   const [showEmoji, setShowEmoji] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const[commentLoading,setCommentLoading]=useState(false)
@@ -63,8 +60,6 @@ const PostFooter = ({
 
   return (
     <div className="border-t border-gray-200 pt-4">
-
-
       {topComment ? (
         <>
           <h1> top comment</h1>
@@ -99,8 +94,6 @@ const PostFooter = ({
         null
       )}
     
-
-      {/* Other comments */}
       {otherComments?.length > 0 && (
         <ul className="space-y-4 mt-3">
           {otherComments.map((comment) => (

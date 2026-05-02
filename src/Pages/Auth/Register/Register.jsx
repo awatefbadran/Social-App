@@ -17,7 +17,6 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  // ✅ هنا جلبنا الكونتكست
   const { setUserData, setToken } = useContext(AuthContext);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
@@ -40,12 +39,12 @@ const Register = () => {
       setSuccessMessage(respons?.data?.message)
       toast.success(respons?.data?.message)
 
-      // ✅ تحديث الكونتكست
+   
       setUserData(respons?.data?.user || null);
       setToken(respons?.data?.token || null);
   console.log("Token:", respons?.data?.token);
     console.log("User Data:", respons?.data?.user);
-      // ✅ التنقل للـ login بعد التحديث
+   
       navigate("/login");
     } catch (error) {
       setErrorMessage(error?.response?.data?.message)
